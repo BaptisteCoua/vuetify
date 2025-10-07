@@ -1,9 +1,9 @@
 // Utilities
-import { toValue } from 'vue'
-import { destructComputed, getForeground, isCssColor, isParsableColor, parseColor } from '@/util'
+import {toValue} from 'vue'
+import {destructComputed, getForeground, isCssColor, isParsableColor, parseColor} from '@/util'
 
 // Types
-import type { CSSProperties, MaybeRefOrGetter, Ref } from 'vue'
+import type {CSSProperties, MaybeRefOrGetter, Ref} from 'vue'
 
 export type ColorValue = string | false | null | undefined
 
@@ -18,18 +18,18 @@ export interface BackgroundColorData {
 }
 
 // Composables
-export function useColor (colors: MaybeRefOrGetter<{ background?: ColorValue, text?: ColorValue }>) {
+export function useColor(colors: MaybeRefOrGetter<{ background?: ColorValue, text?: ColorValue }>) {
   return destructComputed(() => {
     const {
       class: colorClasses,
       style: colorStyles,
     } = computeColor(colors)
 
-    return { colorClasses, colorStyles }
+    return {colorClasses, colorStyles}
   })
 }
 
-export function useTextColor (color: MaybeRefOrGetter<ColorValue>): TextColorData {
+export function useTextColor(color: MaybeRefOrGetter<ColorValue>): TextColorData {
   const {
     colorClasses: textColorClasses,
     colorStyles: textColorStyles,
@@ -37,10 +37,10 @@ export function useTextColor (color: MaybeRefOrGetter<ColorValue>): TextColorDat
     text: toValue(color),
   }))
 
-  return { textColorClasses, textColorStyles }
+  return {textColorClasses, textColorStyles}
 }
 
-export function useBackgroundColor (color: MaybeRefOrGetter<ColorValue>): BackgroundColorData {
+export function useBackgroundColor(color: MaybeRefOrGetter<ColorValue>): BackgroundColorData {
   const {
     colorClasses: backgroundColorClasses,
     colorStyles: backgroundColorStyles,
@@ -48,10 +48,10 @@ export function useBackgroundColor (color: MaybeRefOrGetter<ColorValue>): Backgr
     background: toValue(color),
   }))
 
-  return { backgroundColorClasses, backgroundColorStyles }
+  return {backgroundColorClasses, backgroundColorStyles}
 }
 
-export function computeColor (colors: MaybeRefOrGetter<{ background?: ColorValue, text?: ColorValue }>) {
+export function computeColor(colors: MaybeRefOrGetter<{ background?: ColorValue, text?: ColorValue }>) {
   const _colors = toValue(colors)
   const classes: string[] = []
   const styles: CSSProperties = {}
@@ -83,5 +83,5 @@ export function computeColor (colors: MaybeRefOrGetter<{ background?: ColorValue
     }
   }
 
-  return { class: classes, style: styles }
+  return {class: classes, style: styles}
 }

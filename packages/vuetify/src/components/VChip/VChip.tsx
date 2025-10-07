@@ -144,7 +144,7 @@ export const VChip = genericComponent<VChipSlots>()({
     const closeProps = toRef(() => ({
       'aria-label': t(props.closeLabel),
       disabled: props.disabled,
-      onClick (e: MouseEvent) {
+      onClick(e: MouseEvent) {
         e.preventDefault()
         e.stopPropagation()
 
@@ -154,15 +154,22 @@ export const VChip = genericComponent<VChipSlots>()({
       },
     }))
 
-    const { colorClasses, colorStyles, variantClasses } = useVariant(() => {
+    const {
+      colorClasses,
+      colorStyles,
+      backgroundColorClasses,
+      backgroundColorStyles,
+      variantClasses
+    } = useVariant(() => {
       const showColor = !group || group.isSelected.value
       return ({
         color: showColor ? props.color ?? props.baseColor : props.baseColor,
         variant: props.variant,
+        bgColor: showColor ? props.bgColor : undefined,
       })
     })
 
-    function onClick (e: MouseEvent) {
+    function onClick(e: MouseEvent) {
       emit('click', e)
 
       if (!isClickable.value) return
@@ -171,7 +178,7 @@ export const VChip = genericComponent<VChipSlots>()({
       group?.toggle()
     }
 
-    function onKeyDown (e: KeyboardEvent) {
+    function onKeyDown(e: KeyboardEvent) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault()
         onClick(e as any as MouseEvent)
@@ -202,6 +209,7 @@ export const VChip = genericComponent<VChipSlots>()({
             themeClasses.value,
             borderClasses.value,
             colorClasses.value,
+            backgroundColorClasses.value,
             densityClasses.value,
             elevationClasses.value,
             roundedClasses.value,
@@ -214,57 +222,57 @@ export const VChip = genericComponent<VChipSlots>()({
             colorStyles.value,
             props.style,
           ]}
-          disabled={ props.disabled || undefined }
-          draggable={ props.draggable }
-          tabindex={ isClickable.value ? 0 : undefined }
-          onClick={ onClick }
-          onKeydown={ isClickable.value && !isLink.value && onKeyDown }
+          disabled={props.disabled || undefined}
+          draggable={props.draggable}
+          tabindex={isClickable.value ? 0 : undefined}
+          onClick={onClick}
+          onKeydown={isClickable.value && !isLink.value && onKeyDown}
           v-ripple={[isClickable.value && props.ripple, null]}
-          { ...link.linkProps }
+          {...link.linkProps}
         >
-          { genOverlays(isClickable.value, 'v-chip') }
+          {genOverlays(isClickable.value, 'v-chip')}
 
-          { hasFilter && (
+          {hasFilter && (
             <VExpandXTransition key="filter">
               <div
                 class="v-chip__filter"
-                v-show={ group.isSelected.value }
+                v-show={group.isSelected.value}
               >
-                { !slots.filter ? (
+                {!slots.filter ? (
                   <VIcon
                     key="filter-icon"
-                    icon={ props.filterIcon }
+                    icon={props.filterIcon}
                   />
                 ) : (
                   <VDefaultsProvider
                     key="filter-defaults"
-                    disabled={ !props.filterIcon }
+                    disabled={!props.filterIcon}
                     defaults={{
-                      VIcon: { icon: props.filterIcon },
+                      VIcon: {icon: props.filterIcon},
                     }}
-                    v-slots:default={ slots.filter }
+                    v-slots:default={slots.filter}
                   />
                 )}
               </div>
             </VExpandXTransition>
           )}
 
-          { hasPrepend && (
+          {hasPrepend && (
             <div key="prepend" class="v-chip__prepend">
-              { !slots.prepend ? (
+              {!slots.prepend ? (
                 <>
-                  { props.prependIcon && (
+                  {props.prependIcon && (
                     <VIcon
                       key="prepend-icon"
-                      icon={ props.prependIcon }
+                      icon={props.prependIcon}
                       start
                     />
                   )}
 
-                  { props.prependAvatar && (
+                  {props.prependAvatar && (
                     <VAvatar
                       key="prepend-avatar"
-                      image={ props.prependAvatar }
+                      image={props.prependAvatar}
                       start
                     />
                   )}
@@ -272,7 +280,7 @@ export const VChip = genericComponent<VChipSlots>()({
               ) : (
                 <VDefaultsProvider
                   key="prepend-defaults"
-                  disabled={ !hasPrependMedia }
+                  disabled={!hasPrependMedia}
                   defaults={{
                     VAvatar: {
                       image: props.prependAvatar,
@@ -283,14 +291,14 @@ export const VChip = genericComponent<VChipSlots>()({
                       start: true,
                     },
                   }}
-                  v-slots:default={ slots.prepend }
+                  v-slots:default={slots.prepend}
                 />
               )}
             </div>
           )}
 
           <div class="v-chip__content" data-no-activator="">
-            { slots.default?.({
+            {slots.default?.({
               isSelected: group?.isSelected.value,
               selectedClass: group?.selectedClass.value,
               select: group?.select,
@@ -300,30 +308,30 @@ export const VChip = genericComponent<VChipSlots>()({
             }) ?? toDisplayString(props.text)}
           </div>
 
-          { hasAppend && (
+          {hasAppend && (
             <div key="append" class="v-chip__append">
-              { !slots.append ? (
+              {!slots.append ? (
                 <>
-                  { props.appendIcon && (
+                  {props.appendIcon && (
                     <VIcon
                       key="append-icon"
                       end
-                      icon={ props.appendIcon }
+                      icon={props.appendIcon}
                     />
                   )}
 
-                  { props.appendAvatar && (
+                  {props.appendAvatar && (
                     <VAvatar
                       key="append-avatar"
                       end
-                      image={ props.appendAvatar }
+                      image={props.appendAvatar}
                     />
                   )}
                 </>
               ) : (
                 <VDefaultsProvider
                   key="append-defaults"
-                  disabled={ !hasAppendMedia }
+                  disabled={!hasAppendMedia}
                   defaults={{
                     VAvatar: {
                       end: true,
@@ -334,24 +342,24 @@ export const VChip = genericComponent<VChipSlots>()({
                       icon: props.appendIcon,
                     },
                   }}
-                  v-slots:default={ slots.append }
+                  v-slots:default={slots.append}
                 />
               )}
             </div>
           )}
 
-          { hasClose && (
+          {hasClose && (
             <button
               key="close"
               class="v-chip__close"
               type="button"
               data-testid="close-chip"
-              { ...closeProps.value }
+              {...closeProps.value}
             >
-              { !slots.close ? (
+              {!slots.close ? (
                 <VIcon
                   key="close-icon"
-                  icon={ props.closeIcon }
+                  icon={props.closeIcon}
                   size="x-small"
                 />
               ) : (
@@ -363,7 +371,7 @@ export const VChip = genericComponent<VChipSlots>()({
                       size: 'x-small',
                     },
                   }}
-                  v-slots:default={ slots.close }
+                  v-slots:default={slots.close}
                 />
               )}
             </button>
